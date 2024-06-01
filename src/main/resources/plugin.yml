@@ -1,0 +1,12 @@
+name: ClickerfyStash
+version: '${project.version}'
+author: byBackfish
+main: de.bybackfish.clickerfy.ClickerfyStash
+api-version: '1.20'
+commands:
+  stash:
+    aliases:
+      - clickerfystash
+      - viewstash
+      - pickupstash
+    usage: /<command>
