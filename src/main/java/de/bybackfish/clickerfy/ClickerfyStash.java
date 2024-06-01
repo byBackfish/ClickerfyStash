@@ -3,6 +3,7 @@ package de.bybackfish.clickerfy;
 import de.bybackfish.clickerfy.api.IStashManager;
 import de.bybackfish.clickerfy.api.StashManagerFactory;
 import de.bybackfish.clickerfy.commands.StashCommand;
+import de.bybackfish.clickerfy.commands.ToggleStashMessagesCommand;
 import de.bybackfish.clickerfy.listener.PlayerConnectionListener;
 import de.bybackfish.clickerfy.listener.PlayerPickupListener;
 import net.kyori.adventure.text.format.TextColor;
@@ -18,8 +19,6 @@ public final class ClickerfyStash extends JavaPlugin {
     @SuppressWarnings("ConstantConditions")
     @Override
     public void onEnable() {
-        System.out.println("ClickerfyStash enabled");
-
         stashManager = StashManagerFactory.createStashManager();
 
         getServer().getPluginManager().registerEvents(new PlayerConnectionListener(this, stashManager), this);
@@ -27,6 +26,8 @@ public final class ClickerfyStash extends JavaPlugin {
 
         getCommand("stash").setExecutor(new StashCommand(stashManager));
         getCommand("stash").setTabCompleter(new StashCommand(stashManager));
+
+        getCommand("togglestashmessages").setExecutor(new ToggleStashMessagesCommand(stashManager));
 
         Runtime.getRuntime().addShutdownHook(new Thread(() -> stashManager.saveAllStashes()));
 

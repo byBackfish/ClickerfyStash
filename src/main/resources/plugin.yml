@@ -10,3 +10,8 @@ commands:
       - viewstash
       - pickupstash
     usage: /<command>
+  togglestashmessages:
+    aliases:
+      - togglestash
+      - stashtoggle
+    usage: /<command>

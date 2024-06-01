@@ -19,6 +19,11 @@ public class PlayerStash implements IPlayerStash {
 
     private ItemStack[] stash = new ItemStack[0];
 
+    private boolean sendMessages = true;
+    private long lastMessageSent = 0;
+
+    private final long messageCooldown = 1000 * 30;
+
     @Override
     public ItemStack[] getItemsInStash() {
         return stash.clone();
@@ -56,8 +61,18 @@ public class PlayerStash implements IPlayerStash {
     }
 
     @Override
+    public boolean shouldSendMessages() {
+        return sendMessages;
+    }
+
+    @Override
+    public void setSendMessages(boolean sendMessages) {
+        this.sendMessages = sendMessages;
+    }
+
+    @Override
     public void saveToFile(File file) throws IOException {
-        String encoded = Base64Helper.encodeMany(stash);
+        String encoded = Base64Helper.encodeMany(sendMessages, stash);
         Files.write(file.toPath(), encoded.getBytes());
     }
 
@@ -65,16 +80,20 @@ public class PlayerStash implements IPlayerStash {
     public void loadFromFile(File file) throws FileNotFoundException {
         try {
             String content = new String(Files.readAllBytes(file.toPath()));
-            setItemsInStash(Base64Helper.decodeMany(content));
+            Base64Helper.Pair<Boolean, ItemStack[]> result = Base64Helper.decodeMany(content);
+            sendMessages = result.getKey();
+            setItemsInStash(result.getValue());
         } catch (IOException e) {
             throw new FileNotFoundException("Could not read file");
         }
     }
 
     @Override
-    public void sendStashMessage(Player player) {
+    public void sendStashMessage(Player player, boolean ignoreSetting) {
         if (stash.length == 0) return;
-        System.out.println("sending message");
+        if((!sendMessages || System.currentTimeMillis() - lastMessageSent < messageCooldown) && !ignoreSetting) return;
+
+        lastMessageSent = System.currentTimeMillis();
 
         var sumOfItems = Arrays.stream(stash).mapToInt(ItemStack::getAmount).sum();
 
@@ -97,6 +116,11 @@ public class PlayerStash implements IPlayerStash {
         component = component.hoverEvent(summaryOfStashHoverEvent);
 
         player.sendMessage(component);
+    }
+
+    @Override
+    public void sendStashMessage(Player player) {
+        sendStashMessage(player, false);
     }
 
     private @NotNull Component getComponent(int sumOfItems, Component clickHereToHoverEvent) {

@@ -35,7 +35,7 @@ public class StashCommand implements TabCompleter, CommandExecutor {
         IPlayerStash playerStash = stashManager.getPlayerStash(player);
 
         if (args.length == 0) {
-            playerStash.sendStashMessage(player);
+            playerStash.sendStashMessage(player, true);
             return true;
         }
 

@@ -21,12 +21,11 @@ public class PlayerConnectionListener implements Listener {
 
     @EventHandler
     public void onLogin(PlayerLoginEvent event) {
-        System.out.println("login");
         stashManager.loadStash(event.getPlayer());
 
         IPlayerStash playerStash = stashManager.getPlayerStash(event.getPlayer());
 
-        Bukkit.getScheduler().runTaskLater(pluginInstance, () -> playerStash.sendStashMessage(event.getPlayer()), 20 * 2);
+        Bukkit.getScheduler().runTaskLater(pluginInstance, () -> playerStash.sendStashMessage(event.getPlayer()), 20 * 5);
     }
 
     @EventHandler

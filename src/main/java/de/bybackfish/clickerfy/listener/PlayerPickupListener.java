@@ -18,7 +18,6 @@ public class PlayerPickupListener implements Listener {
     public void onPickup(PlayerAttemptPickupItemEvent event) {
         if (event.getRemaining() == 0) return;
         if (event.getItem().getItemStack().getAmount() != event.getRemaining()) return;
-        System.out.printf("Player %s tried to pickup item %s (count: %d, remaining: %d) with a full inventory\n", event.getPlayer().getName(), event.getItem().getItemStack().getType().name(), event.getItem().getItemStack().getAmount(), event.getRemaining());
 
         event.getItem().remove();
         event.setCancelled(true);

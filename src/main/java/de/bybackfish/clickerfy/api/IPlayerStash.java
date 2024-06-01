@@ -24,4 +24,8 @@ public interface IPlayerStash {
     void loadFromFile(File file) throws FileNotFoundException;
 
     void sendStashMessage(Player player);
+    void sendStashMessage(Player player, boolean ignoreSetting);
+
+    boolean shouldSendMessages();
+    void setSendMessages(boolean sendMessages);
 }

@@ -33,10 +33,11 @@ public class StashManager implements IStashManager {
     @SuppressWarnings("ResultOfMethodCallIgnored")
     @Override
     public void saveStash(UUID uuid) {
-        File file = Paths.get("clickerfy-stashes", uuid + ".stash").toFile();
+        File file = Paths.get("plugins", "clickerfy-stash", uuid + ".stash").toFile();
         if (!file.exists()) {
             try {
-                 file.createNewFile();
+                file.getParentFile().mkdirs();
+                file.createNewFile();
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
@@ -51,7 +52,7 @@ public class StashManager implements IStashManager {
 
     @Override
     public void loadStash(UUID uuid) {
-        File file = Paths.get("clickerfy-stashes", uuid + ".stash").toFile();
+        File file = Paths.get("plugins", "clickerfy-stash", uuid + ".stash").toFile();
         if (!file.exists()) return;
 
         try {
