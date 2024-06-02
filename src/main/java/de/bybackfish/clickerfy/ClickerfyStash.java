@@ -6,14 +6,10 @@ import de.bybackfish.clickerfy.commands.StashCommand;
 import de.bybackfish.clickerfy.commands.ToggleStashMessagesCommand;
 import de.bybackfish.clickerfy.listener.PlayerConnectionListener;
 import de.bybackfish.clickerfy.listener.PlayerPickupListener;
-import net.kyori.adventure.text.format.TextColor;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public final class ClickerfyStash extends JavaPlugin {
-
-    public static final TextColor PRIMARY_COLOR = TextColor.color(0xFFD700);
-    public static final TextColor SECONDARY_COLOR = TextColor.color(0x00FF00);
     private IStashManager stashManager;
 
     @SuppressWarnings("ConstantConditions")

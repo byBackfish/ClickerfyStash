@@ -24,6 +24,8 @@ public class StashCommand implements TabCompleter, CommandExecutor {
 
     private final IStashManager stashManager;
 
+    private final int MAX_ITEMS = 25;
+
     public StashCommand(IStashManager stashManager) {
         this.stashManager = stashManager;
     }
@@ -60,7 +62,7 @@ public class StashCommand implements TabCompleter, CommandExecutor {
         clearMap.remove(player.getUniqueId());
 
         if (args[0].equalsIgnoreCase("view")) {
-            TextComponent component = Component.text("Items in your stash:").color(NamedTextColor.DARK_GRAY)
+            TextComponent component = Component.text("Items in your stash:").color(NamedTextColor.GREEN)
                     .append(Component.newline());
 
             if(playerStash.getItemsInStash().length == 0) {
@@ -68,11 +70,15 @@ public class StashCommand implements TabCompleter, CommandExecutor {
                 return true;
             }
 
-            for (int i = 0; i < playerStash.getItemsInStash().length; i++) {
-                component = component.append(Component.text(i + 1 + ". ").color(ClickerfyStash.PRIMARY_COLOR))
-                        .append(playerStash.getItemsInStash()[i].displayName()).color(ClickerfyStash.SECONDARY_COLOR)
-                        .append(Component.text(" x" + playerStash.getItemsInStash()[i].getAmount()).color(ClickerfyStash.SECONDARY_COLOR))
+            for (int i = 0; i < Math.min(playerStash.getItemsInStash().length, MAX_ITEMS); i++) {
+                component = component.append(Component.text(i + 1 + ". ").color(NamedTextColor.YELLOW))
+                        .append(playerStash.getItemsInStash()[i].displayName())
+                        .append(Component.text(" x" + playerStash.getItemsInStash()[i].getAmount()).color(NamedTextColor.DARK_GRAY))
                         .append(Component.newline());
+            }
+
+            if(playerStash.getItemsInStash().length > MAX_ITEMS) {
+                component = component.append(Component.text(String.format("And %d more...", playerStash.getItemsInStash().length - MAX_ITEMS)).color(NamedTextColor.GRAY));
             }
 
             player.sendMessage(component);
@@ -115,10 +121,12 @@ public class StashCommand implements TabCompleter, CommandExecutor {
 
     @Override
     public @Nullable List<String> onTabComplete(@NotNull CommandSender commandSender, @NotNull Command command, @NotNull String s, @NotNull String[] strings) {
-        return Stream.of(
+        if(strings.length == 1)
+            return Stream.of(
                 "view",
                 "collect",
                 "clear"
-        ).filter(e -> e.startsWith(strings[0])).toList();
+            ).filter(e -> e.startsWith(strings[0])).toList();
+        return Collections.emptyList();
     }
 }

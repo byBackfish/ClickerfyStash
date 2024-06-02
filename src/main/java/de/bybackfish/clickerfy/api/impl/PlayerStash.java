@@ -107,10 +107,15 @@ public class PlayerStash implements IPlayerStash {
 
         for (int i = 0; i < Math.min(stash.length, 8); i++) {
             summaryOfStashHoverEvent = summaryOfStashHoverEvent
-                    .append(Component.text(i + 1 + ". ").color(NamedTextColor.DARK_GRAY))
+                    .append(Component.text(i + 1 + ". ").color(NamedTextColor.YELLOW))
                     .append(stash[i].displayName())
                     .append(Component.text(" x" + stash[i].getAmount()).color(NamedTextColor.DARK_GRAY))
                     .append(Component.newline());
+        }
+
+        if(stash.length > 8) {
+            summaryOfStashHoverEvent = summaryOfStashHoverEvent
+                    .append(Component.text("And " + (stash.length - 8) + " more...").color(NamedTextColor.GRAY));
         }
 
         component = component.hoverEvent(summaryOfStashHoverEvent);
@@ -138,7 +143,7 @@ public class PlayerStash implements IPlayerStash {
                                 Component.text(String.format("%s items ", prettifyNumber(stash.length))).color(NamedTextColor.AQUA)
                         )
                         .append(
-                                Component.text("stashed away!! ").color(NamedTextColor.YELLOW)
+                                Component.text("stashed away! ").color(NamedTextColor.YELLOW)
                         )
                         .appendNewline()
                         .append(
